@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom"
 
 const formatDuration = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
-    const remsecs = seconds % 60;
+    const remsecs = Math.floor(seconds % 60);
     return `${mins}:${remsecs < 10 ? `0${remsecs}` : remsecs}`;
 }
 
