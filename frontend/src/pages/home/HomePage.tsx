@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Topbar from "@/components/Topbar"
 import { useMusicStore } from "@/stores/useMusicStore"
 import { useEffect } from "react"

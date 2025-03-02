@@ -50,10 +50,10 @@ function AlbumPage() {
     }
 
   return (
-    <div className="h-screen w-full">
+    <div className="h-full">
         <ScrollArea className="h-full rounded-md">
             {/* Main content */}
-            <div className="relative min-h-screen">
+            <div className="relative min-h-full">
                 {/* gradiant background */}
                 <div
                     className="absolute inset-0 bg-gradient-to-b from-[#5038a0]/80 via-zinc-900/80

@@ -8,7 +8,7 @@ const uploadToCloduinary = async (file)=>{
         const result = await cloudinary.uploader.upload(file.tempFilePath,{
             resource_type: "auto",
         })
-        return result.secure_url;
+        return result.secure_url; 
     } catch (error) {
         console.log("Error in uplodToCloudinary",error)
         throw new Error("Error uploading to cloduinary")

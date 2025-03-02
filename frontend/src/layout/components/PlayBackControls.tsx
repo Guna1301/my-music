@@ -41,7 +41,7 @@ function PlayBackControls() {
             audio.removeEventListener('loadedmetadata',updateDuration);
             audio.removeEventListener('ended',handleEnded);
         }
-    },[])
+    },[currentSong])
 
     const handleSeek = (value:number[])=>{
         if(audioRef.current){

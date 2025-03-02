@@ -19,17 +19,20 @@ function AudioPlayer() {
     },[isPlaying])
 
     // handle song ends
-    useEffect(()=>{
-        const audio  = audioref.current
+    useEffect(() => {
+        const audio = audioref.current;
+        const handleEnded = () => {
+            playNext();
+        };
 
-        const handleEnded= ()=>{
-            playNext()
+        if (audio) {
+            audio.addEventListener("ended", handleEnded);
         }
 
-        audio?.addEventListener("ended",handleEnded)
-
-        return ()=> audio?.removeEventListener('ended',handleEnded)
-    },[playNext])
+        return () => {
+            audio?.removeEventListener("ended", handleEnded);
+        };
+    }, [playNext]);
 
     // handle song changes
     useEffect(()=>{
