@@ -58,4 +58,3 @@ httpServer.listen(PORT, ()=>{
     connectDB()
 })
 
-// TODO: socket.io

@@ -32,7 +32,7 @@ export const useChatStore = create<ChatStore>((set,get)=>({
     users: [],
     isLoading: false,
     error: null,
-    socket:null,
+    socket:socket,
     isConnected :false,
     onlineUsers:new Set(),
     useActivities:new Map(),
@@ -128,7 +128,7 @@ export const useChatStore = create<ChatStore>((set,get)=>({
     fetchMessages : async(userId:string)=>{
         set({isLoading:true,error:null})
         try {
-            const response = await axiosInstance.get(`/ysers/messages/${userId}`)
+            const response = await axiosInstance.get(`/users/messages/${userId}`)
             set({ messages:response.data})
         } catch (error:any) {
             set({error:error.message})
