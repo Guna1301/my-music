@@ -1,6 +1,33 @@
+import Topbar from "@/components/Topbar";
+import { useChatStore } from "@/stores/useChatStore"
+import { useUser } from "@clerk/clerk-react";
+import { useEffect } from "react";
+import UserList from "./components/UserList";
+
 function ChatPage() {
+  const {user}=useUser();
+  const {messages,selectedUser,fetchUsers,fetchMessages}=useChatStore();
+
+  useEffect(()=>{
+    if(user){
+      fetchUsers();
+      console.log("fetch users")
+    }
+  },[fetchUsers,user])
+
+  useEffect(()=>{
+    if(selectedUser){
+      fetchMessages(selectedUser.clerkId);
+    }
+  },[selectedUser,fetchMessages])
+
   return (
-    <div>ChatPage</div>
+    <main className="h-full rounded-lg bg-gradient-to-b from-zinc-800 to-zinc-900 overflow-hidden">
+      <Topbar/>
+      <div className="grid lg:grid-cols-[300px_1fr] grid-cols-[80px_1fr] h-[calc(100vh-180px)]">
+        <UserList/>
+      </div>
+    </main>
   )
 }
 
