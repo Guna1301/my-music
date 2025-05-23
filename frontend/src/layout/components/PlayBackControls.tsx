@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { usePlayerStore } from "@/stores/usePlayerStore"
-import { Laptop2, ListMusic, Mic2, Pause, Play, Repeat, Shuffle, SkipBack, SkipForward, Volume1 } from "lucide-react";
+import { Laptop2, ListMusic, Mic2, Pause, Play, Repeat, Repeat1, Shuffle, SkipBack, SkipForward, Volume1 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 const formatDuration = (seconds: number) => {
@@ -11,7 +11,7 @@ const formatDuration = (seconds: number) => {
 }
 
 function PlayBackControls() {
-    const {isPlaying,currentSong,togglePlay, playNext, playPrevious}= usePlayerStore();
+    const {isPlaying,currentSong,isShuffle,isRepeat,togglePlay, playNext, playPrevious,playShuffle,playRepeat}= usePlayerStore();
     const [volume,setVolume] = useState(75);
     const [duration,setDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
@@ -30,9 +30,17 @@ function PlayBackControls() {
         audio.addEventListener('timeupdate',updateTime)
         audio.addEventListener('loadedmetadata',updateDuration);
 
-        const handleEnded = ()=>{
-            usePlayerStore.setState({isPlaying:false})
-        }
+        const handleEnded = () => {
+            
+            if (isRepeat && audioRef.current) {
+                audioRef.current.currentTime = 0; // Restart the song
+                audioRef.current.play(); // Start playing again
+                usePlayerStore.setState({ isPlaying: true });
+            } else {
+                usePlayerStore.setState({ isPlaying: false });
+            }
+        };
+        
 
         audio.addEventListener('ended',handleEnded);
 
@@ -41,7 +49,7 @@ function PlayBackControls() {
             audio.removeEventListener('loadedmetadata',updateDuration);
             audio.removeEventListener('ended',handleEnded);
         }
-    },[currentSong])
+    },[currentSong,isRepeat])
 
     const handleSeek = (value:number[])=>{
         if(audioRef.current){
@@ -81,7 +89,11 @@ function PlayBackControls() {
                     <Button
                         size={'icon'}
                         variant={'ghost'}
-                        className="hidden sm:inline-flex hover:text-white text-zinc-400"
+                        className={`hidden sm:inline-flex ${
+                            isShuffle ? 'text-amber-300' : 'hover:text-white text-zinc-400'
+                        }`}
+                        onClick={playShuffle}
+                        disabled={!currentSong}
                     >
                         <Shuffle className="h-4 w-4"/>
                     </Button>
@@ -105,7 +117,7 @@ function PlayBackControls() {
                     <Button
                         size={'icon'}
                         variant={'ghost'}
-                        className=" hover:text-white text-zinc-400"
+                        className="hover:text-white text-zinc-400"
                         onClick={playNext}
                         disabled={!currentSong}
                     >
@@ -114,9 +126,13 @@ function PlayBackControls() {
                     <Button
                         size={'icon'}
                         variant={'ghost'}
-                        className="hidden sm:inline-flex hover:text-white text-zinc-400"
+                        className={`hidden sm:inline-flex ${
+                            isRepeat ? 'text-amber-300' : 'hover:text-white text-zinc-400'
+                        }`}
+                        onClick={playRepeat}
+                        disabled={!currentSong}
                     >
-                        <Repeat className="h-4 w-4"/>
+                        {isRepeat ? <Repeat1 className="h-4 w-4 fill-white"/> :<Repeat className="h-4 w-4 fill-zinc-400"/>}
                     </Button>
 
                     

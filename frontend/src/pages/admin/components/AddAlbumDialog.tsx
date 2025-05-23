@@ -34,7 +34,6 @@ function AddAlbumDialog() {
 			if (!imageFile) {
 				return toast.error("Please upload an image");
 			}
-
 			const formData = new FormData();
 			formData.append("title", newAlbum.title);
 			formData.append("artist", newAlbum.artist);
