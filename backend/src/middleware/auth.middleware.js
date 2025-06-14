@@ -5,6 +5,7 @@ export const protectRoute = async(req,res,next)=>{
         console.log("userId not found in request",req.auth.userId)
         return res.status(401).json({message:"Unauthorized - you must be logged in"})
     }
+    console.log("userId found in request",req.auth.userId)
     next();
 };
 
