@@ -47,6 +47,17 @@ app.use('/api/songs', songRoutes)
 app.use('/api/albums', albumRoutes)
 app.use('/api/stats', statRoutes)
 
+if (process.env.NODE_ENV === 'production') {
+    // Serve static files from the React app
+    app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+    // The "catchall" handler: for any request that doesn't
+    // match one above, send back React's index.html file.
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+    });
+}
+
 //error handler
 app.use((error,req,res,next)=>{
     res.status(500).json({message: process.env.NODE_ENV ==='production'?"Internal server error" : error.message})
