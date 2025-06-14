@@ -5,6 +5,8 @@ import fileUpload from 'express-fileupload'
 import path from 'path'
 import cors from 'cors'
 import { createServer } from 'http'
+import cron from 'node-cron'
+import fs from 'fs'
 
 import { connectDB } from './lib/db.js'
 import { initializeSocket } from './lib/socket.js'
@@ -39,6 +41,30 @@ app.use(fileUpload({
     }
 }
 ))
+
+
+// cron jobs
+// delete temp files every 24 hours
+cron.schedule('0 0 * * *', () => {
+    console.log('Running cron job to delete temp files every 24 hours');
+    const tempDir = path.join(__dirname, 'tmp');
+    fs.readdir(tempDir, (err, files) => {
+        if (err) {
+            console.error('Error reading temp directory:', err);
+            return;
+        }
+        files.forEach(file => {
+            const filePath = path.join(tempDir, file);
+            fs.unlink(filePath, err => {
+                if (err) {
+                    console.error('Error deleting temp file:', err);
+                } else {
+                    console.log(`Deleted temp file: ${file}`);
+                }
+            });
+        });
+    });
+});
 
 app.use('/api/users', userRoutes)
 app.use('/api/auth', authRoutes)
